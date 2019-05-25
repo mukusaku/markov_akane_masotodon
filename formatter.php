@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 require 'convertEntity.php';
+require 'originalList.php';
 
 use YuzuruS\Mecab\Markovchain;
 $toot = new main();
@@ -10,13 +11,16 @@ class main {
     function execToot(){
         $rawText = $this->generateText();
         //print_r($rawText, false);
-        $sentence = $this->convertToAko($rawText);
+        $markovText = $this->convertToMarkov($rawText);
+
+        $sentence = $this->convertToAko($markovText);
         //print_r($sentence, false);
         $this->toot($sentence);
     }
 
+    // 連合TLからトゥートを取得し整形する
     function generateText(){
-        $mc = new Markovchain();
+        $ol = new originalList();
         $url = "https://akanechan.love/api/v1/timelines/public";
         $json = file_get_contents($url); // 連合から取得したJSON
         $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
@@ -31,9 +35,19 @@ class main {
             }
             $string .= $sValue['content'];
         }
-        return $string;
+        //$rawText = $string . $ol->implodeSentences(); // この行を有効化するとオリジナルテキストも参照する
+        $rawText = $string;
+        return $rawText;
     }
 
+    // マルコフ連鎖を利用した変換を行う
+    function convertToMarkov($rawText) {
+        $mc = new Markovchain();
+        $markovText = $mc->makeMarkovText($rawText);
+        return $markovText;
+    }
+
+    // 変換リストに沿った文章の加工を行う
     function convertToAko($rawText) {
         $convertEntity = new convertEntity();
         $sentence = "";
@@ -47,6 +61,7 @@ class main {
         return $sentence;
     }
 
+    // 接頭辞の追加
     function addPrefix($sentence) {
         $convertEntity = new convertEntity();
         $aryPrefix = $convertEntity->aryPrefixList;
@@ -55,6 +70,7 @@ class main {
         return $aryPrefix[$rand] . $sentence;
     }
 
+    // 接尾辞の追加
     function addSuffix($sentence) {
         $convertEntity = new convertEntity();
         $arySuffix = $convertEntity->arySuffixList;
@@ -63,6 +79,7 @@ class main {
         return $sentence . $arySuffix[$rand];
     }
 
+    // 実際のトゥート処理
     function toot($sentence) {
         /* Settings */
         $schema       = 'https';
