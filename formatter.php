@@ -1,5 +1,7 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require 'convertEntity.php';
+
 use YuzuruS\Mecab\Markovchain;
 $toot = new main();
 $toot->execToot();
@@ -32,17 +34,35 @@ class main {
         return $string;
     }
 
-    function convertToAko($rawText){
+    function convertToAko($rawText) {
+        $convertEntity = new convertEntity();
         $sentence = "";
         // 変換対象の用語リストを配列で取得
-        $aryConvertList = array('アテクシ'=>'あかねちゃん','俺'=>'あかねちゃん'); // TODO 変換処理は別途実装する
+        $aryConvertList = $convertEntity->aryConvertList;
         foreach($aryConvertList as $sBefore => $sAfter) {
             $rawText = str_replace($sBefore, $sAfter, $rawText);
         }
         $sentence = strip_tags($rawText);
+
         return $sentence;
     }
-    
+
+    function addPrefix($sentence) {
+        $convertEntity = new convertEntity();
+        $aryPrefix = $convertEntity->aryPrefixList;
+        $rand = array_rand($aryPrefix);
+
+        return $aryPrefix[$rand] . $sentence;
+    }
+
+    function addSuffix($sentence) {
+        $convertEntity = new convertEntity();
+        $arySuffix = $convertEntity->arySuffixList;
+        $rand = array_rand($arySuffix);
+
+        return $sentence . $arySuffix[$rand];
+    }
+
     function toot($sentence) {
         /* Settings */
         $schema       = 'https';
@@ -54,7 +74,10 @@ class main {
         $visibility   = 'unlisted'; //投稿のプライバシー設定→「未収載」
         $toot_msg     = substr($sentence,0,strpos($sentence, '。'));
         $toot_msg     = rawurlencode($toot_msg); //メッセージをcURL用にエスケープ
-        
+
+        $toot_msg = $this->addPrefix($toot_msg);
+        $toot_msg = $this->addSuffix($toot_msg);
+
         /* Build request */
         $query  = "curl -X ${method}";
         $query .= " -d 'status=${toot_msg}'";
