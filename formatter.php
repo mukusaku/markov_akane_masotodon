@@ -19,17 +19,8 @@ foreach($ary as $skey => $sValue) {
     }
     $string .= $sValue['content'];
 
-}
-//print_r($ary,false);
-//echo $string."\r";
 $text = convertToAko($string);
-
 $markovText = $mc->makeMarkovText($text);
-
-//echo $text."\n";
-//echo '↓'."\n";
-//echo $markovText."\n";
-//echo '↓'."\n";
 
 function convertToAko($sentence){
     // 変換対象の用語リストを配列で取得
