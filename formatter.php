@@ -14,7 +14,7 @@ class main {
         $markovText = $this->convertToMarkov($rawText);
 
         $sentence = $this->convertToAko($markovText);
-        //print_r($sentence, false);
+        print_r($sentence, false);
         $this->toot($sentence);
     }
 
@@ -26,17 +26,29 @@ class main {
         $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
         $ary = json_decode($json,true);
         $string = "";
+        $i = 0; // ループ用
         foreach($ary as $skey => $sValue) {
-            
+            // 先頭10トゥートを抽出対象とする
+            if($i == 10) {
+                break;
+            }
             // 取得したJSONをパースしトゥートだけを抽出する
             // 末尾が句読点の「。」じゃなかったら「。」を付ける
             if(substr($sValue['content'],-1) != "。") {
                 $sValue['content'] .= "。";
             }
             $string .= $sValue['content'];
+            $i++;
         }
         //$rawText = $string . $ol->implodeSentences(); // この行を有効化するとオリジナルテキストも参照する
-        $rawText = $string;
+        
+        // 文中に含まれるURLを除外する
+        preg_match_all('(https?://[-_.!~*\'()a-zA-Z0-9;/?:@&=+$,%#]+)', $string, $result);
+        foreach($result as $sResult){
+            $temp = str_replace($sResult,"",$string);
+        }
+
+        $rawText = $temp;
         return $rawText;
     }
 
@@ -45,6 +57,7 @@ class main {
         $mc = new Markovchain();
         $markovText = $mc->makeMarkovText($rawText);
         return $markovText;
+        //return $rawText;
     }
 
     // 変換リストに沿った文章の加工を行う
