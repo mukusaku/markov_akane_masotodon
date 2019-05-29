@@ -101,10 +101,12 @@ class main {
     }
     // 実際のトゥート処理
     function toot($sentence) {
+        // サーバ情報などの読み込み
+        $arySetting = parse_ini_file("mastodon_setting.ini");
         /* Settings */
         $schema       = 'https';
-        $host         = 'akanechan.love';
-        $access_token = '6f5f65a75df235c6f719a9389a1dff5a1053f7ca6aab0f4f83677d4fd0acfdfe';
+        $host         = $arySetting['server'];
+        $access_token = $arySetting['access_token'];
         $method       = 'POST';
         $endpoint     = '/api/v1/statuses';
         $url          = "${schema}://${host}${endpoint}";
