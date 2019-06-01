@@ -3,9 +3,9 @@ require __DIR__ . '/vendor/autoload.php';
 require 'convertEntity.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
-$toot = new main();
-$toot->execToot();
-class main {
+$formatter = new formatter();
+$formatter->execToot();
+class formatter {
     function execToot(){
         $rawText = $this->generateText();
         //print_r($rawText, false);

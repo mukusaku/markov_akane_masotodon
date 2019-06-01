@@ -22,7 +22,7 @@ class main {
         $method       = 'GET';
         $endpoint     = '/api/v1/notifications';
         $url          = "${schema}://${host}${endpoint}";
-        $url         .= "?exclude_types=follow,favorite,mention\&limit=10";
+        $url         .= "?limit=10";
         /* Build request */
         $query  = "curl -X ${method}";
         $query .= " --header 'Authorization:";
@@ -71,4 +71,3 @@ class main {
         }
     }
 }
-
