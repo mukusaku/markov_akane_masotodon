@@ -100,7 +100,7 @@ class formatter {
         return $sentence . $arySuffix[$rand];
     }
     // 実際のトゥート処理
-    function toot($sentence) {
+    function toot($sentence, $addString = true) {
         // サーバ情報などの読み込み
         $arySetting = parse_ini_file("mastodon_setting.ini");
         /* Settings */
@@ -112,8 +112,10 @@ class formatter {
         $url          = "${schema}://${host}${endpoint}";
         $visibility   = 'unlisted'; //投稿のプライバシー設定→「未収載」
         $toot_msg     = rawurlencode($sentence); //メッセージをcURL用にエスケープ
-        $toot_msg = $this->addPrefix($toot_msg);
-        $toot_msg = $this->addSuffix($toot_msg);
+        if ($addString) {
+            $toot_msg = $this->addPrefix($toot_msg);
+            $toot_msg = $this->addSuffix($toot_msg);
+        }
         /* Build request */
         $query  = "curl -X ${method}";
         $query .= " -d 'status=${toot_msg}'";
