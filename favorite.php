@@ -73,7 +73,8 @@ class favorite {
         $aryBt = array();
         foreach($aryResult as $key => $value) {
             if($value['account']['username'] == "akane"
-                || strpos($value['content'], 'あかね') === false ) {
+                || strpos($value['content'], 'あかね') === false 
+                || strpos($value['content'], 'かわいい') === false ) {
                 continue;
             }
 //            print_r($value, false);

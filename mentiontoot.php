@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
 $mention = new mention();
 $mention->execMention();
@@ -11,7 +12,7 @@ class mention {
         $tootNecessity = $this->actionReblog($aryAkane);
         // 1件以上ブーストしていた場合あかねちゃんからも言及する
         if($tootNecessity) {
-            $this->toot(' :river: ', false);
+            $this->toot($aryAkane, false);
         }
     }
 
@@ -146,7 +147,9 @@ class mention {
     }
 
     // 言及後のトゥート処理
-    function toot($sentence, $addNecessity = true) {
+    function toot($aryAkane, $addNecessity = true) {
+        $sentence = $this->convertToMarkov();
+        
         // サーバ情報などの読み込み
         $arySetting = parse_ini_file("mastodon_setting.ini");
         /* Settings */
@@ -158,10 +161,7 @@ class mention {
         $url          = "${schema}://${host}${endpoint}";
         $visibility   = 'unlisted'; //投稿のプライバシー設定→「未収載」
         $toot_msg     = rawurlencode($sentence); //メッセージをcURL用にエスケープ
-        if ($addNecessity) {
-            $toot_msg = $this->addPrefix($toot_msg);
-            $toot_msg = $this->addSuffix($toot_msg);
-        }
+        $toot_msg    .= " :last: ";
         /* Build request */
         $query  = "curl -X ${method}";
         $query .= " -d 'status=${toot_msg}'";
@@ -173,7 +173,30 @@ class mention {
         $result = `$query`; //バッククォートに注意
         /* Show result */
         //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-        print $toot_msg;
+        //print $toot_msg;
+    }
+
+    // マルコフ連鎖を利用した変換を行う
+    function convertToMarkov() {
+        $ol = new originalList();
+        $string = $ol->implodeSentences(); // この行を有効化するとオリジナルテキストも参照する
+        $mc = new Markovchain();
+        $i = 0; // 無限ループ回避
+        do {
+            // 1文字以上の文章ができるまで処理をやり直す
+            $markovText = $mc->makeMarkovText($string);
+            // 最初に句点が出るところまで切り出す
+            $array = array();
+            $array[] = strpos($markovText, '！');
+            $array[] = strpos($markovText, '？');
+            $array[] = strpos($markovText, '♪');
+            $array[] = strpos($markovText, '、');
+            $array[] = strpos($markovText, '。');
+            $markovText = substr($markovText,0,min($array));            
+            $i++;
+        } while(mb_strlen($markovText) == 0 || $i < 100);
+        print $markovText;
+        return $markovText;
     }
 }
 
