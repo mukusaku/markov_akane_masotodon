@@ -43,9 +43,32 @@ class mention {
                 continue;
             }
             $aryBt += array($value['account']['id'] => strip_tags($value['status']['content']));
+            $this->deleteNotification($value['id']);
         }
         //print_r($aryBt, false);
         return $aryBt;
+    }
+
+    // 通知の削除
+    function deleteNotification($id) {
+        // サーバ情報などの読み込み
+        $arySetting = parse_ini_file("mastodon_setting.ini");
+        /* Settings */
+        $schema       = 'https';
+        $host         = $arySetting['server'];
+        $access_token = $arySetting['access_token'];
+        $method       = 'POST';
+        $endpoint     = '/api/v1/notifications/dismiss/';
+        $url          = "${schema}://${host}${endpoint}";        
+        /* Build request */
+        $query  = "curl -X ${method}";
+        $query .= " -d 'id=${id}'";
+        $query .= " --header 'Authorization:";
+        $query .= " Bearer ${access_token}'";
+        $query .= " -sS ${url}";
+        /* Request */
+        $result = `$query`; //バッククォートに注意
+        return;
     }
 
     function getStatuses($aryInfo) {
