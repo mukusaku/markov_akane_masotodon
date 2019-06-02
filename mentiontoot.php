@@ -85,8 +85,9 @@ class mention {
         $endpoint     = '/api/v1/accounts/';
         $aryIds       = array_keys($aryInfo);
         foreach($aryIds as $id) {
-            $status       = "$id/statuses/";
-            $url          = "${schema}://${host}${endpoint}${status}";        
+            $status       = "$id/statuses";
+            $url          = "${schema}://${host}${endpoint}${status}";
+            $url         .= "?limit=5";
             /* Build request */
             $query  = "curl -X ${method}";
             $query .= " --header 'Authorization:";
