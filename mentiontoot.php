@@ -99,7 +99,7 @@ class mention {
 
             $aryBt = array();
             foreach($aryResult as $key => $value) {
-                if(strpos($value['content'], 'あかねちゃん') !== false
+                if(strpos($value['content'], 'あかね') !== false
                     && strpos($value['content'], 'RT') === false
                     && $value['reblogged'] == 0
                     && $value['visibility'] !== 'private') {
