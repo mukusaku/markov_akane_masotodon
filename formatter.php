@@ -12,9 +12,12 @@ class formatter {
         $convertedText = $this->convertToAko($rawText);
         //print_r($convertedText, false);
         $markovText = $this->convertToMarkov($convertedText);
-        
         //print_r($markovText, false);
-        $this->toot($markovText);
+        if(isset($markovText)) {
+            $this->toot($markovText);
+        } else {
+            return;
+        }
     }
     
     // 連合TLからトゥートを取得し整形する
