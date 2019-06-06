@@ -41,10 +41,10 @@ class favorite {
             if($value['type'] != "mention") {
                 continue;
             }
-//            print_r($value, false);
+            //print_r($value, false);
             $aryBt += array($value['status']['id'] => str_replace("@akane", "", strip_tags($value['status']['content'])));
         }
-        print_r($aryBt, false);
+        //print_r($aryBt, false);
         return $aryBt;
     }
 
@@ -73,16 +73,16 @@ class favorite {
         $aryBt = array();
         foreach($aryResult as $key => $value) {
             if($value['account']['username'] == "akane"
-                || strpos($value['content'], 'あかね') === false
-                || strpos($value['content'], '茜') === false
-                || strpos($value['content'], 'かわいい') === false
-                ) {
+                || (mb_strpos($value['content'], 'あかね') === false)
+           //    || (mb_strpos($value['content'], 'かわいい') === false)
+                ) 
+            {
                 continue;
             }
-//            print_r($value, false);
+            //print_r($value, false);
             $aryBt += array($value['id'] => str_replace("@akane", "", strip_tags($value['content'])));
         }
-        print_r($aryBt, false);
+        //print_r($aryBt, false);
         return $aryBt;
     }
 
@@ -107,7 +107,6 @@ class favorite {
             /* Request */
             $result = `$query`; //バッククォートに注意
 //            print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-            print $query;
         }
     }
 }
