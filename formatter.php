@@ -15,6 +15,7 @@ class formatter {
         //print_r($markovText, false);
         if(isset($markovText)) {
             $this->toot($markovText);
+            return;
         } else {
             return;
         }
