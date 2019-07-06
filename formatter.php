@@ -83,7 +83,7 @@ class formatter {
             // 1文字以上の文章ができるまで処理をやり直す
             $markovText = $mc->makeMarkovText($rawText);
             // 最初に句点が出るところまで切り出す
-            $markovText = substr($markovText,0,strpos($marifkovText, '。'));
+            $markovText = substr($markovText,0,strpos($markovText, '。'));
             $i++;
         } while(mb_strlen($markovText) == 0 || $i < 100);
         
