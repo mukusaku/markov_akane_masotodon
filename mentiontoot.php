@@ -72,6 +72,7 @@ class mention {
         return;
     }
 
+    // ブーストした人のトゥートを直近5件分取得してどのトゥートに言及するか決める
     function getStatuses($aryInfo) {
         // 関数の返り値
         $aryAkane = array();
