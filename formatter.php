@@ -25,15 +25,15 @@ class formatter {
     // 連合TLからトゥートを取得し整形する
     function generateText(){
         $ol = new originalList();
-        $url = "https://akanechan.love/api/v1/timelines/public";
+        $url = "https://akanechan.love/api/v1/timelines/public?limit=40";
         $json = file_get_contents($url); // 連合から取得したJSON
         $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
         $ary = json_decode($json,true);
         $string = "";
         $i = 0; // ループ用
         foreach($ary as $skey => $sValue) {
-            // 先頭10トゥートを抽出対象とする
-            if($i == 10) {
+            // 先頭40トゥートを抽出対象とする
+            if($i == 40) {
                 break;
             }
             
@@ -80,12 +80,12 @@ class formatter {
         $mc = new Markovchain();
         $i = 0; // 無限ループ回避
         do {
-            // 1文字以上の文章ができるまで処理をやり直す
+            // 1文字以上50文字以下の文章ができるまで処理をやり直す
             $markovText = $mc->makeMarkovText($rawText);
             // 最初に句点が出るところまで切り出す
             $markovText = substr($markovText,0,strpos($markovText, '。'));
             $i++;
-        } while(mb_strlen($markovText) == 0 || $i < 100);
+        } while(mb_strlen($markovText) == 0 || mb_strlen($markovText) > 50 || $i < 100);
         
         return $markovText;
     }
@@ -131,6 +131,6 @@ class formatter {
         $result = `$query`; //バッククォートに注意
         /* Show result */
         //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-        print $toot_msg;
+        //print $toot_msg;
     }
 }
