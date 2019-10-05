@@ -7,6 +7,7 @@ $formatter = new formatter();
 $formatter->execToot();
 class formatter {
     function execToot(){
+        // マルコフ連鎖の元となるテキストを生成する
         $rawText = $this->generateText();
         //print_r($rawText, false);
         $convertedText = $this->convertToAko($rawText);
@@ -39,10 +40,9 @@ class formatter {
             // 取得したJSONをパースしhtmlタグを削除したトゥートだけを抽出する
             $rawValue = strip_tags($sValue['content']);
             
-            // URLを除外する
-            preg_match_all('(https?://[-_.!~*\'()a-zA-Z0-9;/?:@&=+$,%#]+)', $rawValue, $result);
-            foreach($result as $sResult){
-                $rawValue = str_replace($sResult,"",$rawValue);
+            // 英字が含まれていたらスキップ
+            if(preg_match('/[a-zA-Z]/', $rawValue)) {
+                continue;
             }
             
             // 末尾が句読点や感嘆符じゃなかったら文節判定用に「。」を付ける
@@ -87,10 +87,6 @@ class formatter {
             $i++;
         } while(mb_strlen($markovText) == 0 || $i < 100);
         
-        if($markovText === false) {
-            // ループの最後まで文章が生成できなかった場合
-            $marifkovText = "たすけて！";
-        }
         return $markovText;
     }
     // 接頭辞の追加
