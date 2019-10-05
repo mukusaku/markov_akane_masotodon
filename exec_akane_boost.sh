@@ -1,3 +1,3 @@
 #!/bin/sh
-cd /home/mastodon/akanebot_mastodon/
-php /home/mastodon/akanebot_mastodon/mentiontoot.php
+cd /home/mastodon/markov_akane_mastodon/
+php /home/mastodon/markov_akane_mastodon/mentiontoot.php
