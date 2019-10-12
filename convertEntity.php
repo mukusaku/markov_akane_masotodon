@@ -1,8 +1,6 @@
 <?php
 class convertEntity {
     public $aryConvertList = array (
-        'あかねちゃん'=>'あかねちゃん :100dreams: ',
-        'アテクシ'=>'あの人',
         '俺'=>'あかねちゃん',
         'やんけ'=>'じゃん！',
         '私'=>'あかねちゃん',
