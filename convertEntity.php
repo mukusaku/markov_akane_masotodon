@@ -68,6 +68,8 @@ class convertEntity {
         'キツい'=>'きびしい',
         'るか？'=>'る？？',
         'しかし'=>'でもでも',
+        'こいつ'=>'この子',
+        'だよな'=>'だよね',
     );
 
     public $aryPrefixList = array (

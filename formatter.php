@@ -84,7 +84,7 @@ class formatter {
             $markovText = $mc->makeMarkovText($rawText);
             // 最初に句点が出るところまで切り出す
             $markovText = substr($markovText,0,strpos($markovText, '。'));
-            $i++;
+            ++$i;
         } while(mb_strlen($markovText) == 0 || mb_strlen($markovText) > 50 || $i < 100);
         
         return $markovText;
