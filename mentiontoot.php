@@ -111,7 +111,7 @@ class mention {
             }
             $aryAkane += $aryBt;
         }
-        //print_r($aryAkane, false);
+//        print_r($aryAkane, false);
         return $aryAkane;
     }
 
@@ -150,7 +150,7 @@ class mention {
 
     // 言及後のトゥート処理
     function toot($aryAkane, $addNecessity = true) {
-        $sentence = $this->convertToMarkov();
+        $sentence = $this->convertToMarkov($aryAkane);
         
         // サーバ情報などの読み込み
         $arySetting = parse_ini_file("mastodon_setting.ini");
@@ -179,9 +179,15 @@ class mention {
     }
 
     // マルコフ連鎖を利用した変換を行う
-    function convertToMarkov() {
+    function convertToMarkov($aryAkane) {
+        $string = "";
+        $randomKey = array_rand($aryAkane, 1);
+        // ランダムにブーストしたトゥートを取得
+        $string .= $aryAkane[$randomKey] . "。";
+        
         $ol = new originalList();
-        $string = $ol->implodeSentences(); // この行を有効化するとオリジナルテキストも参照する
+        $string .= $ol->implodeSentences(); // この行を有効化するとオリジナルテキストも参照する
+        
         $mc = new Markovchain();
         $i = 0; // 無限ループ回避
         do {
@@ -192,8 +198,6 @@ class mention {
             $array[] = strpos($markovText, '！');
             $array[] = strpos($markovText, '？');
             $array[] = strpos($markovText, '♪');
-            $array[] = strpos($markovText, '、');
-            $array[] = strpos($markovText, '。');
             $markovText = substr($markovText,0,min($array));            
             $i++;
         } while(mb_strlen($markovText) == 0 || $i < 100);
