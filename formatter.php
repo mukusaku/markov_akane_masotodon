@@ -37,9 +37,9 @@ class formatter {
                 break;
             }
             
-            // 取得したJSONをパースしhtmlタグを削除したトゥートだけを抽出する
-            $rawValue = strip_tags($sValue['content']);
-            
+            // TODO：タグ削除の処理を削除したが変数への格納だけ残っている。後で変数格納処理を見直す
+            $rawValue = $sValue['content'];
+
             // 英字が含まれていたらスキップ
             if(preg_match('/[a-zA-Z]/', $rawValue)) {
                 continue;
