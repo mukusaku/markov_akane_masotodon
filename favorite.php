@@ -72,10 +72,8 @@ class favorite {
 
         $aryBt = array();
         foreach($aryResult as $key => $value) {
-            if($value['account']['username'] == "akane"
-                || (mb_strpos($value['content'], 'あかね') === false)
-           //    || (mb_strpos($value['content'], 'かわいい') === false)
-                ) 
+            $shouldMention = $this->decisionTargetToMention($value['content']); // 言及するかしないか
+            if($value['account']['username'] == "akane" || ($shouldMention === false)) 
             {
                 continue;
             }
@@ -108,5 +106,18 @@ class favorite {
             $result = `$query`; //バッククォートに注意
 //            print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
         }
+    }
+
+    // 反応する単語かチェックを行う
+    function decisionTargetToMention($toot) {
+        $convertEntity = new convertEntity();
+        // 反応対象の用語リストを配列で取得
+        $aryFavoriteTargetList = $convertEntity->aryFavoriteTargetList;
+        foreach($aryFavoriteTargetList as $word) {
+            if(strpos($toot, $word) !== false) {
+                return true;
+            }
+        }
+        return false;
     }
 }
