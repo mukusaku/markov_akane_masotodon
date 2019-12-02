@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require 'convertEntity.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
 $mention = new mention();
@@ -99,8 +100,9 @@ class mention {
             $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
 
             $aryBt = array();
+            $shouldMention = $this->decisionTargetToMention($value['content']); // 言及するかしないか
             foreach($aryResult as $key => $value) {
-                if(strpos($value['content'], 'あかね') !== false
+                if($shouldMention !== false
                     && strpos($value['content'], 'RT') === false
                     && $value['reblogged'] == 0
                     && $value['visibility'] !== 'private') {
@@ -113,6 +115,20 @@ class mention {
         }
 //        print_r($aryAkane, false);
         return $aryAkane;
+    }
+
+    // 反応する単語かチェックを行う
+    function decisionTargetToMention($toot) {
+        $convertEntity = new convertEntity();
+        // 反応対象の用語リストを配列で取得
+        $aryFavoriteTargetList = $convertEntity->aryFavoriteTargetList;
+        foreach($aryFavoriteTargetList as $word) {
+            if(strpos($toot, $word) !== false) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 
     // 実際のブースト処理
@@ -198,7 +214,7 @@ class mention {
             $array[] = strpos($markovText, '！');
             $array[] = strpos($markovText, '？');
             $array[] = strpos($markovText, '♪');
-            $markovText = substr($markovText,0,min($array));            
+            $markovText = substr($markovText,0,min($array));
             $i++;
         } while(mb_strlen($markovText) == 0 || $i < 100);
         print $markovText;

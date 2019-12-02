@@ -161,4 +161,21 @@ class convertEntity {
         '',
         '',
     );
+
+    public $aryFavoriteTargetList = array (
+        'あかね',
+        'てすと',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+    );
 }
