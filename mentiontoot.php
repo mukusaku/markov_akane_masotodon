@@ -100,8 +100,8 @@ class mention {
             $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
 
             $aryBt = array();
-            $shouldMention = $this->decisionTargetToMention($value['content']); // 言及するかしないか
             foreach($aryResult as $key => $value) {
+                $shouldMention = $this->decisionTargetToMention($value['content']); // 言及するかしないか
                 if($shouldMention !== false
                     && strpos($value['content'], 'RT') === false
                     && $value['reblogged'] == 0
@@ -124,11 +124,10 @@ class mention {
         $aryFavoriteTargetList = $convertEntity->aryFavoriteTargetList;
         foreach($aryFavoriteTargetList as $word) {
             if(strpos($toot, $word) !== false) {
-                return false;
-            } else {
                 return true;
             }
         }
+        return false;
     }
 
     // 実際のブースト処理
