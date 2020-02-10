@@ -78,16 +78,22 @@ class formatter {
     function convertToMarkov($rawText) {
         //return $rawText; // この行を有効化するとマルコフ連鎖をオフ
         $mc = new Markovchain();
-        $i = 0; // 無限ループ回避
-        do {
-            // 1文字以上50文字以下の文章ができるまで処理をやり直す
+        for($i=0; $i<=100; $i++){
             $markovText = $mc->makeMarkovText($rawText);
             // 最初に句点が出るところまで切り出す
-            $markovText = substr($markovText,0,strpos($markovText, '。'));
-            ++$i;
-        } while(mb_strlen($markovText) == 0 || mb_strlen($markovText) > 50 || $i < 100);
+            $array = array();
+            $array[] = strpos($markovText, '。');
+            $array[] = strpos($markovText, '！');
+            $array[] = strpos($markovText, '？');
+            $array[] = strpos($markovText, '♪');
+            $markovText = substr($markovText,0,min($array));
+            // 1文字以上50文字以下の文章が生成できた場合はループを抜ける
+            if(mb_strlen($markovText) > 0 && mb_strlen($markovText) <= 50) {
+                return $markovText;
+            }
+        }
         
-        return $markovText;
+        return " :invitehr: ";
     }
     // 接頭辞の追加
     function addPrefix($sentence) {
