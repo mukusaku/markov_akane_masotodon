@@ -100,8 +100,13 @@ class mention {
 
             $aryBt = array();
             foreach($aryResult as $key => $value) {
-                if(strpos($value['content'], 'あかね') !== false
-                    && strpos($value['content'], 'RT') === false
+                // TLから取得したトゥート内容にはHTMLタグが付いている
+                // 記号を含むトゥートは弾きたいのであらかじめタグは除去しておく
+                $rawValue = strip_tags($value['content']);
+
+                if(strpos($rawValue, 'あかね') !== false
+                    && strpos($rawValue, 'RT') === false
+                    && preg_match('/[!-\/:-@¥\[-`{-~\]]/', $rawValue) == 0
                     && $value['reblogged'] == 0
                     && $value['visibility'] !== 'private') {
                     // 言及対象かつブーストしていなかったら
