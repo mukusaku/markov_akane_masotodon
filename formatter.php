@@ -40,8 +40,8 @@ class formatter {
             // 取得したJSONをパースしhtmlタグを削除したトゥートだけを抽出する
             $rawValue = strip_tags($sValue['content']);
             
-            // 英字が含まれていたらスキップ
-            if(preg_match('/[a-zA-Z]/', $rawValue)) {
+            // 英字・記号が含まれていたらスキップ
+            if(preg_match('/[a-zA-Z0-9!-\/:-@¥\[-`{-~\]]/', $rawValue)) {
                 continue;
             }
             
