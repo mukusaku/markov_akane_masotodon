@@ -157,9 +157,11 @@ class mention {
     // 言及後のトゥート処理
     function toot($aryAkane, $addNecessity = true) {
         $sentence = $this->convertToMarkov($aryAkane);
-         // トゥートAPIを叩く
-         $request = new postActions\PostTootApi();
-         $request->toot($sentence);
+        $sentence .= ' :last: ';
+        
+        // トゥートAPIを叩く
+        $request = new postActions\PostTootApi();
+        $request->toot($sentence);
     }
 
     // マルコフ連鎖を利用した変換を行う
