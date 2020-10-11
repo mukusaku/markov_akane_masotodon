@@ -1,9 +1,10 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+//require __DIR__ . '/mastodon/getActions/GetGlobalTimelineApi.php';
 require 'convertEntity.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
-use markov_akane_mastodon_test\mastodon\getActions\GetGlobalTimelineApi;
+use getActions\GetGlobalTimelineApi;
 
 $formatter = new formatter();
 $formatter->execToot();
@@ -30,7 +31,7 @@ class formatter {
          * 移行中
          **/
         // 連合TL取得APIをインスタンス化
-        $getGlobaltimeLineApi = new GetGlobalTimelineApi();
+        $getGlobaltimeLineApi = new getActions\GetGlobalTimelineApi();
         $ary = $getGlobaltimeLineApi->getGlobalTimeline();
 
         $ol = new originalList();
