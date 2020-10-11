@@ -1,5 +1,5 @@
 <?php
-namespace markov_akane_mastodon\mastodon\getActions;
+namespace markov_akane_mastodon_test\mastodon\getActions;
 
 class GetGlobalTimelineApi {
 

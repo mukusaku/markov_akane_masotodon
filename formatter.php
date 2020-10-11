@@ -3,7 +3,7 @@ require __DIR__ . '/vendor/autoload.php';
 require 'convertEntity.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
-use markov_akane_mastodon\mastodon\getActions\GetGlobalTimelineApi;
+use markov_akane_mastodon_test\mastodon\getActions\GetGlobalTimelineApi;
 
 $formatter = new formatter();
 $formatter->execToot();
