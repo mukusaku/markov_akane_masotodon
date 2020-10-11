@@ -107,8 +107,14 @@ class formatter {
         return $sentence . $arySuffix[$rand];
     }
     // 実際のトゥート処理
-    function toot($sentence, $addString = true) {
+    function toot($sentence, $bAdding = true) {
+        // 接頭辞、接尾辞の追加
+        if($bAdding) {
+            $sentence = $this->addPrefix($sentence);                    
+            $sentence = $this->addSuffix($sentence);
+        }
+        // トゥートAPIを叩く
         $request = new postActions\PostTootApi();
-        $request->toot($sentence, $addString);
+        $request->toot($sentence);
     }
 }
