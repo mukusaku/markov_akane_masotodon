@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/mastodon/postActions/PostTootApi.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
 $mention = new mention();
@@ -156,31 +157,11 @@ class mention {
     // 言及後のトゥート処理
     function toot($aryAkane, $addNecessity = true) {
         $sentence = $this->convertToMarkov($aryAkane);
+        $sentence .= ' :last: ';
         
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'POST';
-        $endpoint     = '/api/v1/statuses';
-        $url          = "${schema}://${host}${endpoint}";
-        $visibility   = 'unlisted'; //投稿のプライバシー設定→「未収載」
-        $toot_msg     = rawurlencode($sentence); //メッセージをcURL用にエスケープ
-        $toot_msg    .= " :last: ";
-        /* Build request */
-        $query  = "curl -X ${method}";
-        $query .= " -d 'status=${toot_msg}'";
-        $query .= " -d 'visibility=${visibility}'";
-        $query .= " --header 'Authorization:";
-        $query .= " Bearer ${access_token}'";
-        $query .= " -sS ${url}";
-        /* Request */
-        $result = `$query`; //バッククォートに注意
-        /* Show result */
-        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-        //print $toot_msg;
+        // トゥートAPIを叩く
+        $request = new postActions\PostTootApi();
+        $request->toot($sentence);
     }
 
     // マルコフ連鎖を利用した変換を行う
