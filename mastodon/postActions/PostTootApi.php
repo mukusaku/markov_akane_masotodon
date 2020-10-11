@@ -9,4 +9,9 @@ class PostTootApi {
         $connectionSettingsUtil = new ConnectionSettingsUtil();
         $request = $connectionSettingsUtil->execToot($sentence);
     }
+
+    public function boost($id) {
+        $connectionSettingsUtil = new ConnectionSettingsUtil();
+        $request = $connectionSettingsUtil->execBoost($id);
+    }
 }
