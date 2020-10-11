@@ -1,8 +1,10 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/mastodon/getActions/GetGlobalTimelineApi.php';
 require 'convertEntity.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
+
 $formatter = new formatter();
 $formatter->execToot();
 class formatter {
@@ -24,11 +26,12 @@ class formatter {
     
     // 連合TLからトゥートを取得し整形する
     function generateText(){
+
+        // 連合TL取得APIを叩きトゥートを取得
+        $getGlobaltimeLineApi = new getActions\GetGlobalTimelineApi();
+        $ary = $getGlobaltimeLineApi->getGlobalTimeline();
+
         $ol = new originalList();
-        $url = "https://akanechan.love/api/v1/timelines/public?limit=40";
-        $json = file_get_contents($url); // 連合から取得したJSON
-        $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-        $ary = json_decode($json,true);
         $string = "";
         $i = 0; // ループ用
         foreach($ary as $skey => $sValue) {
