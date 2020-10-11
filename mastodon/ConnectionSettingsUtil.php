@@ -1,5 +1,4 @@
 <?php
-
 class ConnectionSettingsUtil {
     
     private $schema = 'https';
@@ -20,7 +19,7 @@ class ConnectionSettingsUtil {
     public function execToot($sentence) {
         $this->method = 'POST';
         $this->endPoint = '/api/v1/statuses';
-        $requestUrl = "$this->schema" . '://' . "$this->host" . "$this->endpoint";
+        $requestUrl = $this->schema . '://' . $this->host . $this->endPoint;
 
         $paramSentence = rawurlencode($sentence);
         /* Build request */
@@ -29,7 +28,7 @@ class ConnectionSettingsUtil {
         $query .= " -d 'visibility=" . $this->visibility . "'";
         $query .= " --header 'Authorization:";
         $query .= " Bearer " . $this->accessToken . "'";
-        $query .= " -sS " . $url;
+        $query .= " -sS " . $requestUrl;
         /* Request */
         $result = `$query`; //バッククォートに注意
         /* Show result */

@@ -1,6 +1,7 @@
 <?php
 namespace postActions;
-require __DIR__ . '/mastodon/ConnectionSettingsUtil.php';
+require __DIR__ . '/../ConnectionSettingsUtil.php';
+use ConnectionSettingsUtil;
 
 class PostTootApi {
 
