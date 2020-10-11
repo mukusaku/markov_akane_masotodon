@@ -1,7 +1,7 @@
 <?php
 namespace markov_akane_mastodon\mastodon\getActions;
 
-class getGlobalTimeline {
+class GetGlobalTimeline {
 
     private $nMaxGetTootCount; // 連合TLから最大いくつトゥートを取得する
 
