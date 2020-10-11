@@ -11,7 +11,7 @@ class GetGlobalTimelineApi {
     }
 
     function getGlobalTimeline() {
-        $url = "https://akanechan.love/api/v1/timelines/public?limit=40";
+        $url = "https://akanechan.love/api/v1/timelines/public?limit=$this->nMaxGetTootCount";
         $json = file_get_contents($url); // 連合から取得したJSON
         $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
         $ary = json_decode($json,true);
