@@ -128,7 +128,7 @@ class mention {
         }
         // ブーストAPIを叩く
         $request = new postActions\PostTootApi();
-        $aryIds       = array_keys($aryAkane);
+        $aryIds = array_keys($aryAkane);
         foreach($aryIds as $id) {
             $request->boost($id);
         }
