@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/mastodon/postActions/PostFavoriteApi.php';
 require 'convertEntity.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
@@ -87,26 +88,10 @@ class favorite {
     }
 
     function actionFavorite($aryInfo) {
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'POST';
-        $endpoint     = '/api/v1/statuses/';
+        $request = new postActions\PostFavoriteApi();
         $aryIds       = array_keys($aryInfo);
         foreach($aryIds as $id) {
-            $status       = "$id/favourite/";
-            $url          = "${schema}://${host}${endpoint}${status}";        
-            /* Build request */
-            $query  = "curl -X ${method}";
-            $query .= " --header 'Authorization:";
-            $query .= " Bearer ${access_token}'";
-            $query .= " -sS ${url}";
-            /* Request */
-            $result = `$query`; //バッククォートに注意
-//            print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
+            $request->favorite($id);
         }
     }
 }
