@@ -52,4 +52,19 @@ class ConnectionSettingsUtil {
         //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
         //print $toot_msg;
     }
+
+    public function execFavorite($id) {
+        $this->method = 'POST';
+        $this->endPoint = '/api/v1/statuses/' . "$id/favourite/";
+        $requestUrl = $this->schema . '://' . $this->host . $this->endPoint;
+    
+        /* Build request */ 
+       $query  = "curl -X " . $this->method;
+       $query .= " --header 'Authorization:";
+       $query .= " Bearer " . $this->accessToken . "'";
+       $query .= " -sS " . $requestUrl;
+       $result = `$query`; //バッククォートに注意
+       /* Show result */
+       //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
+   }
 }
