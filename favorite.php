@@ -16,23 +16,8 @@ class favorite {
     }
 
     function getNotifications() {
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'GET';
-        $endpoint     = '/api/v1/notifications';
-        $url          = "${schema}://${host}${endpoint}";
-        $url         .= "?limit=10";
-        /* Build request */
-        $query  = "curl -X ${method}";
-        $query .= " --header 'Authorization:";
-        $query .= " Bearer ${access_token}'";
-        $query .= " -sS ${url}";
-        /* Request */
-        $result = `$query`; //バッククォートに注意
+        $nLimit = "10"; // 
+        $request = new getActions\GetNotificationsApi();
         /* Show result */
         $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
         //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));

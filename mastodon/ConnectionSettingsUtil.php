@@ -8,6 +8,7 @@ class ConnectionSettingsUtil {
     private $endPoint;
 
     private $visibility = 'unlisted'; // トゥートのプライバシー範囲（未収載固定）
+    private $limit = '10'; // 通知取得APIで取得する通知の数
 
     public function __construct() {
         // サーバ設定ファイルの読み込み
@@ -59,12 +60,28 @@ class ConnectionSettingsUtil {
         $requestUrl = $this->schema . '://' . $this->host . $this->endPoint;
     
         /* Build request */ 
-       $query  = "curl -X " . $this->method;
-       $query .= " --header 'Authorization:";
-       $query .= " Bearer " . $this->accessToken . "'";
-       $query .= " -sS " . $requestUrl;
-       $result = `$query`; //バッククォートに注意
-       /* Show result */
-       //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-   }
+        $query  = "curl -X " . $this->method;
+        $query .= " --header 'Authorization:";
+        $query .= " Bearer " . $this->accessToken . "'";
+        $query .= " -sS " . $requestUrl;
+        $result = `$query`; //バッククォートに注意
+        /* Show result */
+        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
+    }
+
+    public function execGetNotifications() {
+        $this->method = 'GET';
+        $this->endPoint = '/api/v1/notifications';
+        $requestUrl = $this->schema . '://' . $this->host . $this->endPoint . "?limit=$this->limit";
+
+        /* Build request */ 
+        $query  = "curl -X " . $this->method;
+        $query .= " --header 'Authorization:";
+        $query .= " Bearer " . $this->accessToken . "'";
+        $query .= " -sS " . $requestUrl;
+        $result = `$query`; //バッククォートに注意
+        /* Show result */
+        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
+        return $result;
+    }
 }
