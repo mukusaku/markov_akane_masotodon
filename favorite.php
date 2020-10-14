@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/mastodon/postActions/PostFavoriteApi.php';
+require __DIR__ . '/mastodon/getActions/GetNotificationsApi.php';
 require 'convertEntity.php';
 require 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
