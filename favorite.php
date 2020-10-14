@@ -16,12 +16,9 @@ class favorite {
     }
 
     function getNotifications() {
-        $nLimit = "10"; // 
+        $nLimit = "10";
         $request = new getActions\GetNotificationsApi();
-        /* Show result */
-        $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
-        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-
+        $aryResult = $request->getNotifications();
         $aryBt = array();
         foreach($aryResult as $key => $value) {
             if($value['type'] != "mention") {
