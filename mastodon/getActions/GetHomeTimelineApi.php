@@ -7,7 +7,7 @@ class GetHomeTimelineApi {
 
     public function getHomeTimeline() {
         $connectionSettingsUtil = new ConnectionSettingsUtil();
-        $result = $connectionSettingsUtil->execGetNotifications();
+        $result = $connectionSettingsUtil->execGetHomeTimeline();
         $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
         //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));\
         return $aryResult;
