@@ -1,6 +1,6 @@
 <?php
 namespace getActions;
-require __DIR__ . '/../ConnectionSettingsUtil.php';
+require_once __DIR__ . '/../ConnectionSettingsUtil.php';
 use ConnectionSettingsUtil;
 
 class GetNotificationsApi {
