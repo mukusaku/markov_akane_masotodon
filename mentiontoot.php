@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/mastodon/getActions/GetUserStatusesApi.php';
 require_once __DIR__ . '/mastodon/postActions/PostTootApi.php';
 require_once __DIR__ . '/mastodon/postActions/PostDeleteNotificationsApi.php';
 require_once 'originalList.php';
@@ -63,27 +64,10 @@ class mention {
     function getStatuses($aryInfo) {
         // 関数の返り値
         $aryAkane = array();
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'GET';
-        $endpoint     = '/api/v1/accounts/';
         $aryIds       = array_keys($aryInfo);
         foreach($aryIds as $id) {
-            $status       = "$id/statuses";
-            $url          = "${schema}://${host}${endpoint}${status}";
-            $url         .= "?limit=5";
-            /* Build request */
-            $query  = "curl -X ${method}";
-            $query .= " --header 'Authorization:";
-            $query .= " Bearer ${access_token}'";
-            $query .= " -sS ${url}";
-            /* Request */
-            $result = `$query`; //バッククォートに注意
-            $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
+            $request = new getAcions\GetUserStatusesApi();
+            $aryResult = $request->getUserStatuses($id);
 
             $aryBt = array();
             foreach($aryResult as $key => $value) {

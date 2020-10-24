@@ -10,6 +10,7 @@ class ConnectionSettingsUtil {
     private $visibility = 'unlisted'; // トゥートのプライバシー範囲（未収載固定）
     private $getNotificationsLimit = '10'; // 通知取得APIで取得する通知の数
     private $getTimelineTootsLimit = '15'; // ホームタイムライン取得APIで取得するトゥートの数
+    private $getUserStatusesLimit  = '5'; // ユーザータイムライン取得APIで取得するトゥートの数
 
     public function __construct() {
         // サーバ設定ファイルの読み込み
@@ -117,5 +118,21 @@ class ConnectionSettingsUtil {
         /* Show result */
         //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
 
+    }
+
+    public function execGetUserStatuses($id) {
+        $this->method = 'GET';
+        $this->endPoint = '/api/v1/accounts/' . $id . '/statuses';
+        $requestUrl = $this->schema . '://' . $this->host . $this->endPoint . "?limit=$this->getUserStatusesLimit";
+
+        /* Build request */ 
+        $query  = "curl -X " . $this->method;
+        $query .= " --header 'Authorization:";
+        $query .= " Bearer " . $this->accessToken . "'";
+        $query .= " -sS " . $requestUrl;
+        $result = `$query`; //バッククォートに注意
+        /* Show result */
+        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
+        return $result;
     }
 }
