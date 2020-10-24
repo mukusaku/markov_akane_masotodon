@@ -66,7 +66,7 @@ class mention {
         $aryAkane = array();
         $aryIds       = array_keys($aryInfo);
         foreach($aryIds as $id) {
-            $request = new getAcions\GetUserStatusesApi();
+            $request = new getActions\GetUserStatusesApi();
             $aryResult = $request->getUserStatuses($id);
 
             $aryBt = array();
