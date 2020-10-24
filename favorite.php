@@ -1,9 +1,10 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/mastodon/postActions/PostFavoriteApi.php';
-require __DIR__ . '/mastodon/getActions/GetNotificationsApi.php';
-require 'convertEntity.php';
-require 'originalList.php';
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/mastodon/postActions/PostFavoriteApi.php';
+require_once __DIR__ . '/mastodon/getActions/GetNotificationsApi.php';
+require_once __DIR__ . '/mastodon/getActions/GetHomeTimelineApi.php';
+require_once 'convertEntity.php';
+require_once 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
 $toot = new favorite();
 $toot->execFav();
