@@ -34,7 +34,7 @@ class favorite {
     }
 
     function getHomeTimeline() {
-        $request = new getActions/GetHomeTimelineApi();
+        $request = new getActions\GetHomeTimelineApi();
         $result = $request->getHomeTimeline();
     
         $aryBt = array();
