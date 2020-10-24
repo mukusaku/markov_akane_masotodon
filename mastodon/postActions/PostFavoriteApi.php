@@ -1,6 +1,6 @@
 <?php
 namespace postActions;
-require __DIR__ . '/../ConnectionSettingsUtil.php';
+require_once __DIR__ . '/../ConnectionSettingsUtil.php';
 use ConnectionSettingsUtil;
 
 class PostFavoriteApi {
