@@ -101,4 +101,21 @@ class ConnectionSettingsUtil {
         //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
         return $result;
     }
+
+    public function execDeleteNotifications($id) {
+        $this->method = 'POST';
+        $this->endPoint = '/api/v1/notifications/dismiss/';
+        $requestUrl = $this->schema . '://' . $this->host . $this->endPoint;
+
+        /* Build request */
+        $query  = "curl -X " . $this->method;
+        $query .= " -d 'id=" . $id . "'";
+        $query .= " --header 'Authorization:";
+        $query .= " Bearer " . $this->accessToken . "'";
+        $query .= " -sS " . $requestUrl;
+        $result = `$query`; //バッククォートに注意
+        /* Show result */
+        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
+
+    }
 }

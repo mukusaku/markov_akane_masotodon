@@ -1,7 +1,8 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/mastodon/postActions/PostTootApi.php';
-require 'originalList.php';
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/mastodon/postActions/PostTootApi.php';
+require_once __DIR__ . '/mastodon/postActions/PostDeleteNotificationsApi.php';
+require_once 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
 $mention = new mention();
 $mention->execMention();
@@ -45,32 +46,17 @@ class mention {
                 continue;
             }
             $aryBt += array($value['account']['id'] => strip_tags($value['status']['content']));
-            $this->deleteNotification($value['id']);
+            $this->deleteNotifications($value['id']);
         }
         //print_r($aryBt, false);
         return $aryBt;
     }
 
     // 通知の削除
-    function deleteNotification($id) {
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'POST';
-        $endpoint     = '/api/v1/notifications/dismiss/';
-        $url          = "${schema}://${host}${endpoint}";        
-        /* Build request */
-        $query  = "curl -X ${method}";
-        $query .= " -d 'id=${id}'";
-        $query .= " --header 'Authorization:";
-        $query .= " Bearer ${access_token}'";
-        $query .= " -sS ${url}";
-        /* Request */
-        $result = `$query`; //バッククォートに注意
-        return;
+    function deleteNotifications($id) {
+        // 通知削除APIを叩く
+        $request = new postActions\PostDeleteNotificationsApi();
+        $request->deleteNotifications($id);
     }
 
     // ブーストした人のトゥートを直近5件分取得してどのトゥートに言及するか決める
