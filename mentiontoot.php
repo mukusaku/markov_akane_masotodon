@@ -1,7 +1,8 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/mastodon/postActions/PostTootApi.php';
-require 'originalList.php';
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/mastodon/postActions/PostTootApi.php';
+require_once __DIR__ . '/mastodon/postActions/PostDeleteNotificationsApi.php';
+require_once 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
 $mention = new mention();
 $mention->execMention();
@@ -54,7 +55,7 @@ class mention {
     // 通知の削除
     function deleteNotifications($id) {
         // 通知削除APIを叩く
-        $request = new postActions\PostDeleteNotoficationsApi();
+        $request = new postActions\PostDeleteNotificationsApi();
         $request->deleteNotifications($id);
     }
 
