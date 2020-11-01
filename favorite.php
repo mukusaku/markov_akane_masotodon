@@ -1,7 +1,10 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-require 'convertEntity.php';
-require 'originalList.php';
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/mastodon/postActions/PostFavoriteApi.php';
+require_once __DIR__ . '/mastodon/getActions/GetNotificationsApi.php';
+require_once __DIR__ . '/mastodon/getActions/GetHomeTimelineApi.php';
+require_once 'convertEntity.php';
+require_once 'originalList.php';
 use YuzuruS\Mecab\Markovchain;
 $toot = new favorite();
 $toot->execFav();
@@ -15,27 +18,9 @@ class favorite {
     }
 
     function getNotifications() {
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'GET';
-        $endpoint     = '/api/v1/notifications';
-        $url          = "${schema}://${host}${endpoint}";
-        $url         .= "?limit=10";
-        /* Build request */
-        $query  = "curl -X ${method}";
-        $query .= " --header 'Authorization:";
-        $query .= " Bearer ${access_token}'";
-        $query .= " -sS ${url}";
-        /* Request */
-        $result = `$query`; //バッククォートに注意
-        /* Show result */
-        $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
-        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-
+        $nLimit = "10";
+        $request = new getActions\GetNotificationsApi();
+        $aryResult = $request->getNotifications();
         $aryBt = array();
         foreach($aryResult as $key => $value) {
             if($value['type'] != "mention") {
@@ -49,27 +34,9 @@ class favorite {
     }
 
     function getHomeTimeline() {
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'GET';
-        $endpoint     = '/api/v1/timelines/home';
-        $url          = "${schema}://${host}${endpoint}";
-        $url         .= "?limit=15";
-        /* Build request */
-        $query  = "curl -X ${method}";
-        $query .= " --header 'Authorization:";
-        $query .= " Bearer ${access_token}'";
-        $query .= " -sS ${url}";
-        /* Request */
-        $result = `$query`; //バッククォートに注意
-        /* Show result */
-        $aryResult = json_decode($result, JSON_OBJECT_AS_ARRAY);
-        //print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
-
+        $request = new getActions\GetHomeTimelineApi();
+        $aryResult = $request->getHomeTimeline();
+    
         $aryBt = array();
         foreach($aryResult as $key => $value) {
             if($value['account']['username'] == "akane"
@@ -87,26 +54,10 @@ class favorite {
     }
 
     function actionFavorite($aryInfo) {
-        // サーバ情報などの読み込み
-        $arySetting = parse_ini_file("mastodon_setting.ini");
-        /* Settings */
-        $schema       = 'https';
-        $host         = $arySetting['server'];
-        $access_token = $arySetting['access_token'];
-        $method       = 'POST';
-        $endpoint     = '/api/v1/statuses/';
+        $request = new postActions\PostFavoriteApi();
         $aryIds       = array_keys($aryInfo);
         foreach($aryIds as $id) {
-            $status       = "$id/favourite/";
-            $url          = "${schema}://${host}${endpoint}${status}";        
-            /* Build request */
-            $query  = "curl -X ${method}";
-            $query .= " --header 'Authorization:";
-            $query .= " Bearer ${access_token}'";
-            $query .= " -sS ${url}";
-            /* Request */
-            $result = `$query`; //バッククォートに注意
-//            print_r(json_decode($result, JSON_OBJECT_AS_ARRAY));
+            $request->favorite($id);
         }
     }
 }
